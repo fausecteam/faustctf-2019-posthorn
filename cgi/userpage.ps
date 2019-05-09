@@ -1,0 +1,126 @@
+/drawinput {
+	show
+	/label exch def
+	/height exch def
+	/flags exch def
+	currentpoint /y exch def pop
+
+	[ /Subtype /Widget
+	  /Rect [ 125 y 3 sub height sub 380 y 15 add ]
+	  /F 4
+	  /Ff flags
+	  /DA (/Cour 15 Tf 0 Tr 0.12 0.76 0.05 rg)
+	  /T label
+	  /FT /Tx
+	  /MK << /BC [0.12 0.76 0.05]
+			 /BG [.1 .1 .1]
+		  >>
+	  /ANN pdfmark
+} bind def
+
+/Times-Roman findfont
+20 scalefont
+setfont
+newpath 20 -20 moveto
+
+(Welcome back ) username concatstrings show
+
+
+595 400 sub 2 div
+-842 -300 sub 2 div 150 add
+translate
+
+0 0 400 -300 rectstroke
+
+newpath 20 -30 moveto
+
+/Times-Roman findfont
+20 scalefont
+setfont
+(New Post) show
+/Times-Roman findfont
+15 scalefont
+setfont
+
+newpath 20 -70 moveto
+0 0 (receiver) (Readers:) drawinput
+newpath 20 -110 moveto
+1 12 bitshift 100 (content) (Content:) drawinput
+
+[ /Subtype /Widget
+  /Rect [ 125 -233 200 -253 ]
+  /F 4
+  /DA (/Cour 15 Tf 0 Tr 0.12 0.76 0.05 rg)
+  /T (Submit)
+  /FT /Btn
+  /MK << /BC [0.12 0.76 0.05]
+		 /BG [.1 .1 .1]
+		 /CA (Foo Foo)
+	  >>
+  /A <<
+		 /S /SubmitForm
+		 /F (/post.cgi) completeurl
+		 % TODO: ignores set cookie iff we directly also redirect
+		 % /Next << /S /URI
+		 %		  /URI (/index.cgi)
+		 %	   >>
+		 %		/Flags 16#6
+	 >>
+  /ANN pdfmark
+
+newpath 140 -247 moveto
+(Submit) show
+
+showpage
+
+pagesetup
+newpath 20 -20 moveto
+(Your Messages:) show
+0 20 rmoveto
+
+(SELECT get_posts\() username sqlescapestring (,) username sqlescapestring (\);) 4 {concatstrings} repeat {
+	/entry exch def
+
+	currentpoint exch pop 50 sub 20 exch newpath moveto
+
+	/Times-Roman findfont
+	10 scalefont
+	setfont
+	entry /posted get show
+	currentpoint exch pop 20 sub 20 exch newpath moveto
+	/Times-Roman findfont
+	15 scalefont
+	setfont
+	entry /post get show
+} sqlforallresults
+
+
+(SELECT get_friends\() username sqlescapestring (\);) 2 {concatstrings} repeat {
+	/entry exch def
+
+	entry /posted get username eq not {
+		showpage
+		pagesetup
+
+		newpath 20 -20 moveto
+		entry /posted get ('s Messages:)  concatstrings show
+		0 20 rmoveto
+
+		(SELECT get_posts\() entry /posted get sqlescapestring (,) username sqlescapestring (\);) 4 {concatstrings} repeat {
+			/entry exch def
+
+			currentpoint exch pop 50 sub 20 exch newpath moveto
+
+			/Times-Roman findfont
+			10 scalefont
+			setfont
+			entry /posted get show
+			currentpoint exch pop 20 sub 20 exch newpath moveto
+			/Times-Roman findfont
+			15 scalefont
+			setfont
+			entry /post get show
+		} sqlforallresults
+
+	} if
+} sqlforallresults

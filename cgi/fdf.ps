@@ -1,0 +1,42 @@
+/parsefdf
+{
+	/result 32 dict def
+	/tstdin (%stdin) (r) file def
+
+	% FDF ...
+	tstdin 1000 string readline
+	pop pop
+
+	% ... obj
+	tstdin 1000 string readline
+	pop pop
+
+	{
+		tstdin token
+		false eq {
+			(Could not Tokenize FDF) show exit
+		} if
+
+		(Fields) eq {
+			tstdin token pop pop
+			{
+				tstdin token pop pop
+				tstdin token pop
+				/T eq {
+					result
+					tstdin token pop
+					tstdin token pop pop
+					tstdin token pop
+					tstdin token pop pop
+					put
+				}{
+					exit
+				} ifelse
+			} loop
+
+			tstdin token pop pop
+			exit
+		} if
+	} loop
+	result
+} bind def

@@ -1,0 +1,76 @@
+/drawinput {
+	show
+	/label exch def
+	currentpoint /y exch def pop
+
+	[ /Subtype /Widget
+	  /Rect [ 125 y 3 sub 280 y 15 add ]
+	  /F 4
+	  /DA (/Cour 15 Tf 0 Tr 0.12 0.76 0.05 rg)
+	  /T label
+	  /FT /Tx
+	  /MK << /BC [0.12 0.76 0.05]
+			 /BG [.1 .1 .1]
+		  >>
+	  /ANN pdfmark
+} bind def
+
+
+595 300 sub 2 div
+-842 -200 sub 2 div 200 add
+translate
+
+0 0 300 -200 rectstroke
+
+newpath 20 -30 moveto
+
+/Times-Roman findfont
+20 scalefont
+setfont
+getpar /page get (register) eq {
+	(Register) show
+	(/register.cgi#FDF) completeurl /posturl exch def
+}{
+	(Login) show
+	(/login.cgi#FDF) completeurl /posturl exch def
+} ifelse
+/Times-Roman findfont
+15 scalefont
+setfont
+
+
+newpath 20 -70 moveto
+(username) (Username:) drawinput
+newpath 20 -110 moveto
+(password) (Password:) drawinput
+
+getpar /page get (register) eq not {
+	newpath 20 -150 moveto
+	(Register) show
+
+	[ /Subtype /Link
+	  /Rect [ 20 -133 100 -153 ]
+	  /Action << /Subtype /URI /URI (/index.cgi?page=register) >>
+	  /ANN pdfmark
+} if
+
+[ /Subtype /Widget
+  /Rect [ 125 -133 200 -153 ]
+  /F 4
+  /DA (/Cour 15 Tf 0 Tr 0.12 0.76 0.05 rg)
+  /T (Submit)
+  /FT /Btn
+%  /H /P
+  /MK << /BC [0.12 0.76 0.05]
+		 /BG [.1 .1 .1]
+		 /CA (Foo Foo)
+	  >>
+  /A <<
+		 /S /SubmitForm
+		 /F posturl
+		 % TODO: ignores set cookie iff we directly also redirect
+	 >>
+  /ANN pdfmark
+
+newpath 140 -147 moveto
+(Submit) show

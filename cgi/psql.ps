@@ -1,0 +1,22 @@
+/sqlgetrow{
+	null (w) .tempfile dup 4 -1 roll writestring closefile
+	(%pipe%psql -z -t -A -f ) exch concatstrings (r) file 100 string readline pop
+} bind def
+
+/sqlescapestring {
+	(t) genuuid concatstrings ($) 2 {dup 3 1 roll 2 {concatstrings} repeat} repeat
+} bind def
+
+/sqlforallresults {
+	/code exch def
+	null (w) .tempfile dup 4 -1 roll writestring closefile
+	(%pipe%psql -z -t -A -f ) exch concatstrings (r) file /fd exch def
+	{
+		mark fd 512 string readline {
+			null (w) .tempfile dup 4 -1 roll writestring closefile
+			5 dict dup dup 4 -1 roll run 3 -1 roll exch /posted exch put /post exch put code exec cleartomark
+		}{
+			cleartomark exit
+		} ifelse
+	} loop
+} bind def

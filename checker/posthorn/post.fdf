@@ -1,0 +1,8 @@
+%FDF-1.2
+1 0 obj
+<</FDF<</F<</F(http://{host}:5001/index.cgi)/Type/Filespec/UF(http://{host}:5001/index.cgi)>>/Fields[<</T(receiver)/V({receiver})>><</T(content)/V({post})>><</T(Submit)/V/Off>>]>>>>
+endobj
+
+trailer
+<</Root 1 0 R>>
+%%EOF

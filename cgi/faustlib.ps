@@ -1,0 +1,58 @@
+/concatstrings % (a) (b) -> (ab)
+{ exch dup length
+  2 index length add string
+  dup dup 4 2 roll copy length
+  4 -1 roll putinterval
+} bind def
+
+/triangle {
+	newpath
+		0 0 moveto
+		100 0 lineto
+		0 -100 lineto
+	closepath
+	fill
+} def
+
+/sierpinski {
+	dup 0 gt
+	{
+		1 sub
+		gsave 0.5 0.5 scale dup sierpinski grestore
+		gsave 50 0 translate 0.5 0.5 scale dup sierpinski grestore
+		gsave 0 -50 translate 0.5 0.5 scale sierpinski grestore
+	}
+	{ pop triangle }
+	ifelse
+} def
+
+/validateparam
+{
+	exch (=) search {
+		exch pop 3 -1 roll
+		eq { true }{ pop false } ifelse
+	}{ pop false } ifelse
+} bind def
+
+/checksession
+{
+	sqlescapestring (SELECT username FROM user_table WHERE session = ) exch (;) 2 {concatstrings} repeat sqlgetrow
+} bind def
+
+/completeurl
+{
+	/pathinfo exch def
+	(http://) (HTTP_HOST) getenv pop pathinfo 2 {concatstrings} repeat
+} bind def
+
+/pagesetup {
+	0 0 0 setrgbcolor clippath fill
+	0.12 0.76 0.05 setrgbcolor
+	0 842 translate
+	header
+	0 -20 translate
+
+	/Times-Roman findfont
+	20 scalefont
+	setfont
+} bind def

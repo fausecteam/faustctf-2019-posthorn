@@ -1,0 +1,15 @@
+[Unit]
+Description=Setup Database on First Boot
+ConditionPathExists=!/srv/posthorn/setup
+Requires=postgresql@9.6-main.service
+After=postgresql@9.6-main.service
+Before=nginx.service
+Before=uwsgi.service
+
+[Service]
+Type=oneshot
+ExecStart=/srv/posthorn/setup.sh
+User=root
+
+[Install]
+WantedBy=multi-user.target

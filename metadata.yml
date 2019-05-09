@@ -1,0 +1,28 @@
+# Human-readable name of the service
+name: PostHorn
+# Name of the service for usage in paths, usernames etc.: Should only consist of lowercase alphanumeric
+# characters
+slug: posthorn
+authors:
+  - Christoph Egger <egger@cs.fau.de>
+
+install:
+  debian_packages:
+    - postgresql
+    - ghostscript
+    - uwsgi
+    - uuid
+    - sudo
+    - nginx
+  postinst_commands:
+    - systemctl enable posthorn-database-setup.service
+    - rmdir /srv/posthorn/data/
+  prevent_outgoing_connections: True
+
+checker:
+  module: posthorn
+  class: PosthornChecker
+  debian_packages:
+    - python3-requests
+    - poppler-utils
+  pip_packages: []

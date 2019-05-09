@@ -1,0 +1,13 @@
+/parseget {
+	/result 32 dict def
+	(QUERY_STRING) getenv {
+		dup () eq not {
+			{
+				(&) search exch
+				result exch (=) search pop exch pop exch put
+				{ pop }{ exit } ifelse
+			} loop
+		} if
+	} if
+	result
+} bind def
